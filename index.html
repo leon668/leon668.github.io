@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leon668 — Desarrollo de apps</title>
+  <meta name="description" content="Sitio del desarrollador de PrintValue y otras aplicaciones móviles.">
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f7f7f8;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #eaeaea; background: #101114; }
+      .card { background: #1a1c20 !important; border-color: #2a2d33 !important; }
+      a { color: #6ea8fe !important; }
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+    header { text-align: center; margin-bottom: 40px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    .tag { color: #666; font-size: 1.05rem; }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e8;
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .card h2 { font-size: 1.15rem; margin: 0 0 8px; }
+    .card p { margin: 0 0 6px; }
+    a { color: #0b62d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    footer { text-align: center; color: #888; font-size: .85rem; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Leon668</h1>
+      <p class="tag">Desarrollo de aplicaciones móviles</p>
+    </header>
+
+    <div class="card">
+      <h2>PrintValue</h2>
+      <p>Aplicación para calcular el valor y coste de tus impresiones, disponible para Android e iOS.</p>
+      <p><a href="https://leon668.github.io/PrintValue/privacy-policy/">Política de privacidad</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Contacto</h2>
+      <p>Correo del desarrollador: <a href="mailto:leonardo_dng@hotmail.com">leonardo_dng@hotmail.com</a></p>
+    </div>
+
+    <footer>
+      © <span id="y"></span> Leon668. Todos los derechos reservados.
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
