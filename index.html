@@ -1,65 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leon668 — Desarrollo de apps</title>
-  <meta name="description" content="Sitio del desarrollador de PrintValue y otras aplicaciones móviles.">
-  <style>
-    :root { color-scheme: light dark; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      color: #1a1a1a;
-      background: #f7f7f8;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrintValue — Calcula el coste real de tus impresiones 3D</title>
+<meta name="description" content="PrintValue calcula al instante el coste real de cada impresión 3D: material, electricidad, desgaste, mano de obra y tu margen de ganancia. En tu moneda y tu idioma.">
+<meta name="author" content="Leonardo Núñez">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<meta property="og:title" content="PrintValue — Coste real de tus impresiones 3D">
+<meta property="og:description" content="Precios precisos al instante: material, electricidad, desgaste y margen. En tu moneda y tu idioma.">
+<meta property="og:image" content="assets/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leon668.github.io/">
+<style>
+  :root{
+    --green:#16a34a; --green-dark:#0e8a4f; --green-light:#22c55e;
+    --gold:#f5b82e; --gold-dark:#e0a516;
+    --ink:#0f1a14; --body:#3f4a44; --muted:#6b766f;
+    --bg:#ffffff; --bg-soft:#f4f8f5; --card:#ffffff; --border:#e4ece7;
+    --shadow:0 10px 30px rgba(16,45,30,.10);
+    --radius:20px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ink:#eef4f0; --body:#c4cdc8; --muted:#8a938e;
+      --bg:#0d1512; --bg-soft:#111c17; --card:#16211c; --border:#233029;
+      --shadow:0 12px 34px rgba(0,0,0,.45);
     }
-    @media (prefers-color-scheme: dark) {
-      body { color: #eaeaea; background: #101114; }
-      .card { background: #1a1c20 !important; border-color: #2a2d33 !important; }
-      a { color: #6ea8fe !important; }
-    }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
-    header { text-align: center; margin-bottom: 40px; }
-    h1 { font-size: 2rem; margin: 0 0 8px; }
-    .tag { color: #666; font-size: 1.05rem; }
-    .card {
-      background: #fff;
-      border: 1px solid #e5e5e8;
-      border-radius: 14px;
-      padding: 24px 28px;
-      margin-bottom: 20px;
-    }
-    .card h2 { font-size: 1.15rem; margin: 0 0 8px; }
-    .card p { margin: 0 0 6px; }
-    a { color: #0b62d6; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    footer { text-align: center; color: #888; font-size: .85rem; margin-top: 40px; }
-  </style>
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--body);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{color:var(--ink);line-height:1.15;letter-spacing:-.02em}
+  .eyebrow{color:var(--green);font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--border)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--ink);font-size:1.1rem}
+  .brand img{width:34px;height:34px;border-radius:9px}
+  .nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font-weight:700;padding:9px 18px;border-radius:999px;font-size:.92rem;transition:transform .15s,background .15s}
+  .nav-cta:hover{background:var(--green-dark);transform:translateY(-1px)}
+  @media(max-width:560px){.nav-cta{display:none}}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;padding:76px 0 64px;background:
+     radial-gradient(1200px 500px at 80% -10%, color-mix(in srgb,var(--green-light) 22%,transparent), transparent 60%),
+     radial-gradient(900px 500px at 0% 20%, color-mix(in srgb,var(--gold) 14%,transparent), transparent 55%)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}}
+  .hero .app-icon{width:88px;height:88px;border-radius:22px;box-shadow:var(--shadow);margin-bottom:22px}
+  @media(max-width:860px){.hero .app-icon{margin-inline:auto}}
+  .hero h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:850}
+  .hero h1 .hl{color:var(--green)}
+  .hero p.lead{font-size:clamp(1.05rem,2.2vw,1.28rem);color:var(--body);margin:20px 0 30px;max-width:34ch}
+  @media(max-width:860px){.hero p.lead{margin-inline:auto}}
+
+  .stores{display:flex;gap:14px;flex-wrap:wrap}
+  @media(max-width:860px){.stores{justify-content:center}}
+  .store-btn{display:inline-flex;align-items:center;gap:11px;background:var(--ink);color:#fff;padding:11px 20px;border-radius:14px;transition:transform .15s,opacity .15s}
+  .store-btn:hover{transform:translateY(-2px);opacity:.92}
+  .store-btn svg{width:26px;height:26px;flex:none}
+  .store-btn .s-top{font-size:.66rem;line-height:1;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
+  .store-btn .s-big{font-size:1.12rem;font-weight:700;line-height:1.15}
+  .store-btn .s-txt{display:flex;flex-direction:column;align-items:flex-start}
+
+  /* hero phone */
+  .hero-phone{justify-self:center}
+  .phone{position:relative;width:290px;max-width:78vw;border-radius:44px;padding:12px;background:linear-gradient(160deg,#1c1c1e,#000);box-shadow:0 30px 60px rgba(16,45,30,.28)}
+  .phone::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:96px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:2}
+  .phone img{border-radius:34px;width:100%}
+
+  /* TRUST BAR */
+  .trust{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg-soft)}
+  .trust-inner{display:flex;justify-content:center;gap:16px 56px;flex-wrap:wrap;padding:26px 0;text-align:center}
+  .trust b{display:block;color:var(--green);font-size:1.7rem;font-weight:850;letter-spacing:-.02em}
+  .trust span{color:var(--muted);font-size:.92rem}
+
+  /* SECTIONS */
+  section.pad{padding:80px 0}
+  .sec-head{text-align:center;max-width:620px;margin:0 auto 52px}
+  .sec-head h2{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:850;margin-top:10px}
+  .sec-head p{margin-top:14px;color:var(--body);font-size:1.05rem}
+
+  /* FEATURES */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.features{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.features{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:transform .18s,box-shadow .18s}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .fi{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;background:color-mix(in srgb,var(--green) 14%,transparent)}
+  .fi svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{font-size:1.16rem;margin-bottom:8px}
+  .card p{font-size:.97rem;color:var(--body)}
+
+  /* SHOTS */
+  .shots{background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .shot-row{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  @media(max-width:860px){.shot-row{grid-template-columns:repeat(2,1fr);gap:26px}}
+  @media(max-width:480px){.shot-row{grid-template-columns:1fr;max-width:300px;margin-inline:auto}}
+  .shot{text-align:center}
+  .shot .frame{border-radius:30px;padding:8px;background:linear-gradient(160deg,#1c1c1e,#000);box-shadow:0 16px 34px rgba(16,45,30,.20)}
+  .shot .frame img{border-radius:24px}
+  .shot figcaption{margin-top:14px;font-weight:700;color:var(--ink);font-size:.98rem}
+
+  /* CTA */
+  .cta{padding:84px 0}
+  .cta-box{background:linear-gradient(150deg,var(--green),var(--green-dark));border-radius:28px;padding:56px 32px;text-align:center;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .cta-box::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:color-mix(in srgb,var(--gold) 40%,transparent);filter:blur(10px);opacity:.35;top:-90px;right:-60px}
+  .cta-box h2{color:#fff;font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:850;position:relative}
+  .cta-box p{color:rgba(255,255,255,.92);margin:14px auto 28px;max-width:46ch;position:relative}
+  .cta-box .stores{justify-content:center;position:relative}
+  .cta-box .store-btn{background:#fff;color:var(--ink)}
+
+  /* FOOTER */
+  footer{background:var(--bg);border-top:1px solid var(--border);padding:44px 0 40px}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .foot .brand{font-size:1rem}
+  .foot nav{position:static;background:none;border:none;backdrop-filter:none}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a{color:var(--muted);font-size:.92rem;transition:color .15s}
+  .foot-links a:hover{color:var(--green)}
+  .copy{color:var(--muted);font-size:.85rem;margin-top:22px}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Leon668</h1>
-      <p class="tag">Desarrollo de aplicaciones móviles</p>
-    </header>
 
-    <div class="card">
-      <h2>PrintValue</h2>
-      <p>Aplicación para calcular el valor y coste de tus impresiones, disponible para Android e iOS.</p>
-      <p><a href="https://leon668.github.io/PrintValue/privacy-policy/">Política de privacidad</a></p>
-    </div>
-
-    <div class="card">
-      <h2>Contacto</h2>
-      <p>Correo del desarrollador: <a href="mailto:leonardo_dng@hotmail.com">leonardo_dng@hotmail.com</a></p>
-    </div>
-
-    <footer>
-      © <span id="y"></span> Leon668. Todos los derechos reservados.
-    </footer>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><img src="assets/icon.png" alt="PrintValue"> PrintValue</a>
+    <a class="nav-cta" href="#descargar">Descargar</a>
   </div>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <img class="app-icon" src="assets/icon.png" alt="Icono de PrintValue">
+      <p class="eyebrow">Calculadora de costes 3D</p>
+      <h1>Sabe cuánto cuesta <span class="hl">de verdad</span> cada impresión 3D</h1>
+      <p class="lead">Material, electricidad, desgaste de la máquina y tu margen de ganancia — calculado al instante, en tu moneda y tu idioma.</p>
+      <div class="stores" id="descargar">
+        <a class="store-btn" href="https://apps.apple.com/app/id6787824764" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.2-1.13 3.02-.86.98-2.27 1.74-3.44 1.65-.14-1.1.44-2.28 1.1-3.02.75-.86 2.15-1.55 3.47-1.65zM20.5 17.3c-.6 1.38-.88 1.99-1.65 3.2-1.07 1.68-2.58 3.78-4.46 3.79-1.67.02-2.1-1.09-4.37-1.08-2.27.01-2.74 1.1-4.41 1.09-1.88-.02-3.31-1.9-4.38-3.58C-1.33 17.3-1.63 11.9.9 9.03c1.05-1.2 2.68-1.96 4.22-1.96 1.57 0 2.56 1.08 3.86 1.08 1.26 0 2.03-1.08 3.85-1.08 1.37 0 2.83.75 3.86 2.03-3.39 1.86-2.84 6.7 0 8.18z"/></svg>
+          <span class="s-txt"><span class="s-top">Descárgalo en el</span><span class="s-big">App Store</span></span>
+        </a>
+        <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.leon668.printvalue" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M3.6 2.1 13.3 11.8 3.6 21.5c-.3-.2-.5-.6-.5-1.1V3.2c0-.5.2-.9.5-1.1z" opacity=".0"/><path fill="#00D2FF" d="M3.9 2.05a1.2 1.2 0 0 0-.62 1.06v17.78c0 .48.22.86.58 1.05l10.02-9.95L3.9 2.05z"/><path fill="#FFCE00" d="M17.9 9.34 14.3 7.26 3.88 2.04l.02-.01c.16-.08.42-.06.7.1l13.3 7.21z"/><path fill="#00F076" d="M3.86 21.95c-.28.16-.54.17-.7.09l10.5-10.24 3.6 3.53-13.4 6.62z"/><path fill="#FF3A44" d="m17.9 14.66-3.6-3.53 3.6-3.53 3.24 1.76c.86.47.86 1.68 0 2.15l-3.24 1.15z"/></svg>
+          <span class="s-txt"><span class="s-top">Disponible en</span><span class="s-big">Google Play</span></span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-phone">
+      <div class="phone"><img src="assets/02-calcular.png" alt="Pantalla de cálculo de coste en PrintValue"></div>
+    </div>
+  </div>
+</header>
+
+<div class="trust">
+  <div class="wrap trust-inner">
+    <div><b>151</b><span>monedas</span></div>
+    <div><b>202</b><span>países</span></div>
+    <div><b>25</b><span>idiomas</span></div>
+    <div><b>iOS · Android</b><span>disponible ahora</span></div>
+  </div>
+</div>
+
+<section class="pad">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Por qué PrintValue</p>
+      <h2>Deja de adivinar tus precios</h2>
+      <p>Cada variable que afecta al coste de una pieza, en una sola app pensada para makers y negocios de impresión 3D.</p>
+    </div>
+    <div class="features">
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h16M8 15l3-4 3 3 4-6"/></svg></div>
+        <h3>Coste exacto</h3>
+        <p>Material, electricidad y depreciación de la máquina calculados con precisión, incluyendo gastos generales (overhead).</p>
+      </div>
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 1v22M6 5h9a3 3 0 0 1 0 6H8a3 3 0 0 0 0 6h10"/></svg></div>
+        <h3>Margen y ganancia</h3>
+        <p>Aplica tu margen o markup y obtén al instante el precio de venta recomendado para cada trabajo.</p>
+      </div>
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+        <h3>Tus máquinas</h3>
+        <p>Guarda cada impresora con su potencia, coste y desgaste. Reutilízalas en cualquier cálculo con un toque.</p>
+      </div>
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 8c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 8v8c0 1.7 3.6 3 8 3s8-1.3 8-3V8"/></svg></div>
+        <h3>Tus filamentos</h3>
+        <p>Biblioteca de bobinas con precio y peso. Elige un filamento guardado y el coste de material se rellena solo.</p>
+      </div>
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></div>
+        <h3>Tu moneda e idioma</h3>
+        <p>151 monedas y 25 idiomas. PrintValue se adapta a tu país para que los precios tengan sentido donde vendes.</p>
+      </div>
+      <div class="card">
+        <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Privado por diseño</h3>
+        <p>Tus datos se guardan en tu dispositivo, con respaldo opcional en tu propio Google Drive. Tú tienes el control.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="shots pad">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Un vistazo</p>
+      <h2>Simple, rápido y claro</h2>
+      <p>Una interfaz limpia que va al grano: introduce, calcula y cobra lo justo.</p>
+    </div>
+    <div class="shot-row">
+      <figure class="shot"><div class="frame"><img src="assets/01-panel.png" alt="Panel principal de PrintValue"></div><figcaption>Panel</figcaption></figure>
+      <figure class="shot"><div class="frame"><img src="assets/02-calcular.png" alt="Cálculo del coste de una impresión"></div><figcaption>Calcular</figcaption></figure>
+      <figure class="shot"><div class="frame"><img src="assets/03-maquinas.png" alt="Gestión de máquinas"></div><figcaption>Máquinas</figcaption></figure>
+      <figure class="shot"><div class="frame"><img src="assets/04-filamentos.png" alt="Biblioteca de filamentos"></div><figcaption>Filamentos</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Empieza a cobrar el precio correcto</h2>
+      <p>Descarga PrintValue gratis y calcula el coste real de tu próxima impresión en menos de un minuto.</p>
+      <div class="stores">
+        <a class="store-btn" href="https://apps.apple.com/app/id6787824764" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.2-1.13 3.02-.86.98-2.27 1.74-3.44 1.65-.14-1.1.44-2.28 1.1-3.02.75-.86 2.15-1.55 3.47-1.65zM20.5 17.3c-.6 1.38-.88 1.99-1.65 3.2-1.07 1.68-2.58 3.78-4.46 3.79-1.67.02-2.1-1.09-4.37-1.08-2.27.01-2.74 1.1-4.41 1.09-1.88-.02-3.31-1.9-4.38-3.58C-1.33 17.3-1.63 11.9.9 9.03c1.05-1.2 2.68-1.96 4.22-1.96 1.57 0 2.56 1.08 3.86 1.08 1.26 0 2.03-1.08 3.85-1.08 1.37 0 2.83.75 3.86 2.03-3.39 1.86-2.84 6.7 0 8.18z"/></svg>
+          <span class="s-txt"><span class="s-top">Descárgalo en el</span><span class="s-big">App Store</span></span>
+        </a>
+        <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.leon668.printvalue" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00D2FF" d="M3.9 2.05a1.2 1.2 0 0 0-.62 1.06v17.78c0 .48.22.86.58 1.05l10.02-9.95L3.9 2.05z"/><path fill="#FFCE00" d="M17.9 9.34 14.3 7.26 3.88 2.04c.16-.08.42-.06.7.1l13.3 7.2z"/><path fill="#00F076" d="M3.86 21.95c-.28.16-.54.17-.7.09l10.5-10.24 3.6 3.53-13.4 6.62z"/><path fill="#FF3A44" d="m17.9 14.66-3.6-3.53 3.6-3.53 3.24 1.76c.86.47.86 1.68 0 2.15l-3.24 1.15z"/></svg>
+          <span class="s-txt"><span class="s-top">Disponible en</span><span class="s-big">Google Play</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="#top"><img src="assets/icon.png" alt="" style="width:30px;height:30px;border-radius:8px"> PrintValue</a>
+      <div class="foot-links">
+        <a href="https://apps.apple.com/app/id6787824764" target="_blank" rel="noopener">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.leon668.printvalue" target="_blank" rel="noopener">Google Play</a>
+        <a href="https://leon668.github.io/PrintValue/privacy-policy/" target="_blank" rel="noopener">Política de privacidad</a>
+        <a href="mailto:leonardo_dng@hotmail.com">Contacto</a>
+      </div>
+    </div>
+    <p class="copy">© <span id="y"></span> Leonardo Núñez · PrintValue. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>
